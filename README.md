@@ -46,7 +46,7 @@ erDiagram
 
     DADOS_BANCARIOS {
         int id_dados_bancarios PK
-        int id_pessoa FK
+        int id_pessoa FK, UK
         varchar banco
         varchar agencia
         varchar conta
@@ -54,7 +54,7 @@ erDiagram
 
     ATENDENTE {
         int id_atendente PK
-        int id_pessoa FK
+        int id_pessoa FK, UK
     }
 
     VEICULO {
