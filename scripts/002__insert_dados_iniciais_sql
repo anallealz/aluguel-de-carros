@@ -1,3 +1,10 @@
+-- ============================================
+-- DADOS INICIAIS - SISTEMA DE ALUGUEL DE CARROS
+-- ============================================
+
+
+-- 1. PESSOAS
+
 INSERT INTO pessoa (cpf, nome, sobrenome, endereco, email)
 VALUES
 ('11111111111', 'Ana', 'Leal', 'Rua A, 100', 'ana.leal@email.com'),
@@ -8,19 +15,43 @@ VALUES
 ('66666666666', 'Thamires', 'Vargas', 'Rua F, 600', 'thamires.vargas@email.com'),
 ('77777777777', 'Letícia', 'Gondim', 'Rua G, 700', 'leticia.gondim@email.com'),
 ('88888888888', 'Charlie', 'Brown', 'Rua H, 800', 'charlie.brown@email.com')
-ON CONFLICT (cpf) DO NOTHING;
+ON CONFLICT (cpf) DO UPDATE
+SET
+    nome = EXCLUDED.nome,
+    sobrenome = EXCLUDED.sobrenome,
+    endereco = EXCLUDED.endereco,
+    email = EXCLUDED.email;
+
+
+-- 2. DADOS BANCÁRIOS
 
 INSERT INTO dados_bancarios (id_pessoa, banco, agencia, conta)
-VALUES
-(1, 'Nubank', '0001', '10001-0'),
-(2, 'Itaú', '0001', '20002-0'),
-(3, 'Bradesco', '0001', '30003-0'),
-(4, 'Banco do Brasil', '0001', '40004-0'),
-(5, 'Santander', '0001', '50005-0'),
-(6, 'Caixa', '0001', '60006-0'),
-(7, 'Inter', '0001', '70007-0'),
-(8, 'Nubank', '0001', '80008-0')
-ON CONFLICT (id_pessoa) DO NOTHING;
+SELECT
+    p.id_pessoa,
+    dados.banco,
+    dados.agencia,
+    dados.conta
+FROM (
+    VALUES
+    ('11111111111', 'Nubank', '0001', '10001-0'),
+    ('22222222222', 'Itaú', '0001', '20002-0'),
+    ('33333333333', 'Bradesco', '0001', '30003-0'),
+    ('44444444444', 'Banco do Brasil', '0001', '40004-0'),
+    ('55555555555', 'Santander', '0001', '50005-0'),
+    ('66666666666', 'Caixa', '0001', '60006-0'),
+    ('77777777777', 'Inter', '0001', '70007-0'),
+    ('88888888888', 'Nubank', '0001', '80008-0')
+) AS dados(cpf, banco, agencia, conta)
+JOIN pessoa p
+    ON p.cpf = dados.cpf
+ON CONFLICT (id_pessoa) DO UPDATE
+SET
+    banco = EXCLUDED.banco,
+    agencia = EXCLUDED.agencia,
+    conta = EXCLUDED.conta;
+
+
+-- 3. VEÍCULOS
 
 INSERT INTO veiculo (placa, marca, modelo, tipo)
 VALUES
@@ -34,25 +65,66 @@ VALUES
 ('AAA4B56', 'Honda', 'CB 500F', 'Motocicleta'),
 ('CCC7D89', 'Volkswagen', 'Delivery', 'Caminhão'),
 ('EEE1F23', 'Mercedes-Benz', 'Sprinter', 'Caminhão')
-ON CONFLICT (placa) DO NOTHING;
+ON CONFLICT (placa) DO UPDATE
+SET
+    marca = EXCLUDED.marca,
+    modelo = EXCLUDED.modelo,
+    tipo = EXCLUDED.tipo;
+
+
+-- 4. CONTRATOS
 
 INSERT INTO contrato
 (numero_contrato, tipo_pagamento, data_inicio, data_fim, id_pessoa, id_veiculo)
-VALUES
-('CTR001', 'PIX', '2026-06-05', '2026-06-10', 1, 1),
-('CTR002', 'Cartão', '2026-06-18', '2026-06-25', 2, 2),
-('CTR003', 'PIX', '2026-07-02', '2026-07-06', 3, 6),
-('CTR004', 'Cartão', '2026-07-15', '2026-07-20', 4, 4),
-('CTR005', 'PIX', '2026-07-28', '2026-08-03', 5, 3),
-('CTR006', 'Cartão', '2026-08-08', '2026-08-13', 6, 7),
-('CTR007', 'PIX', '2026-08-17', '2026-08-22', 7, 5),
-('CTR008', 'Cartão', '2026-08-26', '2026-08-30', 8, 1),
-('CTR009', 'PIX', '2026-09-01', '2026-09-07', 1, 8),
-('CTR010', 'Cartão', '2026-09-10', '2026-09-15', 2, 10)
-ON CONFLICT (numero_contrato) DO NOTHING;
+
+SELECT
+    dados.numero_contrato,
+    dados.tipo_pagamento,
+    dados.data_inicio,
+    dados.data_fim,
+    p.id_pessoa,
+    v.id_veiculo
+FROM (
+    VALUES
+    ('CTR001', 'PIX', DATE '2026-06-05', DATE '2026-06-10', '11111111111', 'ABC1D23'),
+    ('CTR002', 'Cartão', DATE '2026-06-18', DATE '2026-06-25', '22222222222', 'DEF4G56'),
+    ('CTR003', 'PIX', DATE '2026-07-02', DATE '2026-07-06', '33333333333', 'STU7V89'),
+    ('CTR004', 'Cartão', DATE '2026-07-15', DATE '2026-07-20', '44444444444', 'KLM1N23'),
+    ('CTR005', 'PIX', DATE '2026-07-28', DATE '2026-08-03', '55555555555', 'GHI7J89'),
+    ('CTR006', 'Cartão', DATE '2026-08-08', DATE '2026-08-13', '66666666666', 'WXY1Z23'),
+    ('CTR007', 'PIX', DATE '2026-08-17', DATE '2026-08-22', '77777777777', 'OPQ4R56'),
+    ('CTR008', 'Cartão', DATE '2026-08-26', DATE '2026-08-30', '88888888888', 'ABC1D23'),
+    ('CTR009', 'PIX', DATE '2026-09-01', DATE '2026-09-07', '11111111111', 'AAA4B56'),
+    ('CTR010', 'Cartão', DATE '2026-09-10', DATE '2026-09-15', '22222222222', 'EEE1F23')
+) AS dados(
+    numero_contrato,
+    tipo_pagamento,
+    data_inicio,
+    data_fim,
+    cpf,
+    placa
+)
+JOIN pessoa p
+    ON p.cpf = dados.cpf
+JOIN veiculo v
+    ON v.placa = dados.placa
+
+ON CONFLICT (numero_contrato) DO UPDATE
+SET
+    tipo_pagamento = EXCLUDED.tipo_pagamento,
+    data_inicio = EXCLUDED.data_inicio,
+    data_fim = EXCLUDED.data_fim,
+    id_pessoa = EXCLUDED.id_pessoa,
+    id_veiculo = EXCLUDED.id_veiculo;
+
+
+-- 5. ATENDENTES
 
 INSERT INTO atendente (id_pessoa)
-VALUES
-(1),
-(2)
+SELECT id_pessoa
+FROM pessoa
+WHERE cpf IN (
+    '11111111111',
+    '22222222222'
+)
 ON CONFLICT (id_pessoa) DO NOTHING;
