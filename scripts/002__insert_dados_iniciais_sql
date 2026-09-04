@@ -1,0 +1,58 @@
+INSERT INTO pessoa (cpf, nome, sobrenome, endereco, email)
+VALUES
+('11111111111', 'Ana', 'Leal', 'Rua A, 100', 'ana.leal@email.com'),
+('22222222222', 'Matheus', 'Alves', 'Rua B, 200', 'matheus.alves@email.com'),
+('33333333333', 'Carlos', 'Alberto', 'Rua C, 300', 'carlos.alberto@email.com'),
+('44444444444', 'Ilda', 'Cezar', 'Rua D, 400', 'ilda.cezar@email.com'),
+('55555555555', 'Helena', 'Santos', 'Rua E, 500', 'helena.santos@email.com'),
+('66666666666', 'Thamires', 'Vargas', 'Rua F, 600', 'thamires.vargas@email.com'),
+('77777777777', 'Letícia', 'Gondim', 'Rua G, 700', 'leticia.gondim@email.com'),
+('88888888888', 'Charlie', 'Brown', 'Rua H, 800', 'charlie.brown@email.com')
+ON CONFLICT (cpf) DO NOTHING;
+
+INSERT INTO dados_bancarios (id_pessoa, banco, agencia, conta)
+VALUES
+(1, 'Nubank', '0001', '10001-0'),
+(2, 'Itaú', '0001', '20002-0'),
+(3, 'Bradesco', '0001', '30003-0'),
+(4, 'Banco do Brasil', '0001', '40004-0'),
+(5, 'Santander', '0001', '50005-0'),
+(6, 'Caixa', '0001', '60006-0'),
+(7, 'Inter', '0001', '70007-0'),
+(8, 'Nubank', '0001', '80008-0')
+ON CONFLICT (id_pessoa) DO NOTHING;
+
+INSERT INTO veiculo (placa, marca, modelo, tipo)
+VALUES
+('ABC1D23', 'Toyota', 'Corolla', 'Carro de passeio'),
+('DEF4G56', 'Chevrolet', 'Onix', 'Carro de passeio'),
+('GHI7J89', 'Volkswagen', 'Polo', 'Carro de passeio'),
+('KLM1N23', 'Fiat', 'Argo', 'Carro de passeio'),
+('OPQ4R56', 'Hyundai', 'HB20', 'Carro de passeio'),
+('STU7V89', 'Honda', 'CG 160', 'Motocicleta'),
+('WXY1Z23', 'Yamaha', 'Fazer FZ25', 'Motocicleta'),
+('AAA4B56', 'Honda', 'CB 500F', 'Motocicleta'),
+('CCC7D89', 'Volkswagen', 'Delivery', 'Caminhão'),
+('EEE1F23', 'Mercedes-Benz', 'Sprinter', 'Caminhão')
+ON CONFLICT (placa) DO NOTHING;
+
+INSERT INTO contrato
+(numero_contrato, tipo_pagamento, data_inicio, data_fim, id_pessoa, id_veiculo)
+VALUES
+('CTR001', 'PIX', '2026-06-05', '2026-06-10', 1, 1),
+('CTR002', 'Cartão', '2026-06-18', '2026-06-25', 2, 2),
+('CTR003', 'PIX', '2026-07-02', '2026-07-06', 3, 6),
+('CTR004', 'Cartão', '2026-07-15', '2026-07-20', 4, 4),
+('CTR005', 'PIX', '2026-07-28', '2026-08-03', 5, 3),
+('CTR006', 'Cartão', '2026-08-08', '2026-08-13', 6, 7),
+('CTR007', 'PIX', '2026-08-17', '2026-08-22', 7, 5),
+('CTR008', 'Cartão', '2026-08-26', '2026-08-30', 8, 1),
+('CTR009', 'PIX', '2026-09-01', '2026-09-07', 1, 8),
+('CTR010', 'Cartão', '2026-09-10', '2026-09-15', 2, 10)
+ON CONFLICT (numero_contrato) DO NOTHING;
+
+INSERT INTO atendente (id_pessoa)
+VALUES
+(1),
+(2)
+ON CONFLICT (id_pessoa) DO NOTHING;
