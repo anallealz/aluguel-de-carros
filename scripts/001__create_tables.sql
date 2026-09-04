@@ -24,7 +24,10 @@ CREATE TABLE IF NOT EXISTS veiculo (
     placa VARCHAR(10) NOT NULL UNIQUE,
     marca VARCHAR(50) NOT NULL,
     modelo VARCHAR(50) NOT NULL,
-    tipo VARCHAR(30) NOT NULL
+    tipo VARCHAR(30) NOT NULL,
+
+    CONSTRAINT chk_tipo_veiculo
+        CHECK (tipo IN ('Carro de passeio', 'Motocicleta', 'Caminhão'))
 );
 
 CREATE TABLE IF NOT EXISTS contrato (
